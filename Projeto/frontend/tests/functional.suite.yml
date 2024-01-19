@@ -1,7 +1,11 @@
 suite_namespace: frontend\tests\functional
 actor: FunctionalTester
+
 modules:
     enabled:
-        - Filesystem
-        - Yii2
-        - Asserts
+        - Db:
+              dsn : 'mysql:host=localhost;dbname=projeto'
+              user: 'root'
+              password: ''
+        - Yii2:
+              configFile: 'path/to/config.php'

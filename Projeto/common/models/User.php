@@ -23,7 +23,13 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ *
+ *
+ * * @property Profile $profile
  */
+
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -37,9 +43,15 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(Profile::class, ['user_id' => 'id']);
     }
 
+    public function getFatura()
+    {
+        return $this->hasOne(Fatura::class, ['user_id' => 'id']);
+    }
+
     /**
      * @var mixed|null
      */
+
 
 
     /**
@@ -74,10 +86,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-
             [['newPassword'], 'string', 'min' => 8],
             [['password'], 'safe']
-
         ];
     }
 
@@ -95,7 +105,6 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
-        //throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
@@ -109,10 +118,6 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public static function findByEmail($email)
-    {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
-    }
     /**
      * Finds user by password reset token
      *
@@ -209,12 +214,10 @@ class User extends ActiveRecord implements IdentityInterface
 
 
 
-
     }
 
    public function getPassword(){
         return '';
-
     }
    /* public function beforeSave($insert)
     {

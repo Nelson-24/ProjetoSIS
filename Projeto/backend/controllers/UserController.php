@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use app\models\_search;
+use app\models\SearchCliente;
 use common\models\User;
 use common\models\Profile;
 use backend\models\SignupForm;
 use yii\data\ActiveDataProvider;
 use yii\rbac\Assignment;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
@@ -42,44 +45,22 @@ class UserController extends Controller
      * @return string
      */
     public function actionIndex(){
+        if (Yii::$app->user->can('verClientes')) {
+            $searchModel = new SearchCliente();
+            $provider = $searchModel->search(Yii::$app->request->queryParams);
+
+            return $this->render('index', [
+                'dataProvider' => $provider,
+                'searchModel' => $searchModel,
+            ]);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
 
 
-        $auth = Yii::$app->authManager;
-
-        $clienteRole =$auth->getUserIdsByRole('cliente');
-
-        $provider = new ActiveDataProvider([
-            'query' => User::find()->where(['id'=>$clienteRole]),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-        ]);
-        //var_dump($query);
-        //die();
-
-
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-
-
-        ]);*/
-
-        return $this->render('index', [
-            'dataProvider' => $provider,
-        ]);
     }
+
 
 
     /**
@@ -102,9 +83,15 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new SignupForm(); // Use o SignupForm em vez de User diretamente
+        if (Yii::$app->user->can('criarClientes')) {
+        $model = new \frontend\models\SignupForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Clientes', 'Cliente Criado', 1);
+            $mqtt->disconnect();
 
             return $this->redirect(['index']);
         }
@@ -112,6 +99,10 @@ class UserController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
     }
     /**
      * Updates an existing User model.
@@ -122,17 +113,27 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->can('editarArtigos')) {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Clientes', 'Cliente Atualizado', 1);
+            $mqtt->disconnect();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
-    }
+        } else {
 
+            $this->redirect(['site/error']);
+        }
+    }
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -142,9 +143,13 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (Yii::$app->user->can('eliminarClientes')) {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        } else {
 
-        return $this->redirect(['index']);
+            $this->redirect(['site/error']);
+        }
     }
 
     /**

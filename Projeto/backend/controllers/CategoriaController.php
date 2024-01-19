@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii;
 
 /**
  * CategoriaController implements the CRUD actions for Categoria model.
@@ -38,6 +39,7 @@ class CategoriaController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->can('verCategorias')) {
         $dataProvider = new ActiveDataProvider([
             'query' => Categoria::find(),
             /*
@@ -55,6 +57,9 @@ class CategoriaController extends Controller
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
+        } else{
+            $this->redirect(['site/error']);
+        }
     }
 
     /**
@@ -77,10 +82,17 @@ class CategoriaController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->can('criarCategorias')) {
         $model = new Categoria();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+
+                $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+                $mqtt->connect();
+                $mqtt->publish('Categorias', 'Categoria Criada: ' . $model->descricao, 1);
+                $mqtt->disconnect();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -90,6 +102,9 @@ class CategoriaController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+        } else{
+            $this->redirect(['site/error']);
+        }
     }
 
     /**
@@ -101,15 +116,25 @@ class CategoriaController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->can('editarCategorias')) {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Categorias', 'Categoria Atualizada: ' . $model->descricao, 1);
+            $mqtt->disconnect();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
+        } else{
+            $this->redirect(['site/error']);
+        }
     }
 
     /**
@@ -121,9 +146,22 @@ class CategoriaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (Yii::$app->user->can('eliminarCategorias')) {
+            $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+            $categoriaNome = $model->descricao;
+
+            $model->delete();
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Categorias', 'Categoria Eliminada: ' . $categoriaNome, 1);
+            $mqtt->disconnect();
+
+            return $this->redirect(['index']);
+        } else {
+            $this->redirect(['site/error']);
+        }
     }
 
     /**

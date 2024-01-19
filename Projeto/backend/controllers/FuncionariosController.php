@@ -2,16 +2,15 @@
 
 namespace backend\controllers;
 
-use common\models\User;
-use common\models\Profile;
 use backend\models\SignupForm;
+use common\models\User;
+use app\models\_search;
+use Yii;
 use yii\data\ActiveDataProvider;
-use yii\rbac\Assignment;
+use yii\debug\models\timeline\Search;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use Yii;
-use yii\db\Query;
 
 /**
  * FuncionariosController implements the CRUD actions for User model.
@@ -41,43 +40,27 @@ class FuncionariosController extends Controller
      *
      * @return string
      */
+
     public function actionIndex(){
+        if (Yii::$app->user->can('verFuncionarios')) {
 
+        $searchModel = new _search();
 
-        $auth = Yii::$app->authManager;
-
-        $funcRole =$auth->getUserIdsByRole('funcionario');
-
-        $provider = new ActiveDataProvider([
-            'query' => User::find()->where(['id'=>$funcRole]),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-        ]);
-        //var_dump($query);
-        //die();
-
-        /*
-        'pagination' => [
-            'pageSize' => 50
-        ],
-        'sort' => [
-            'defaultOrder' => [
-                'id' => SORT_DESC,
-            ]
-        ],
-
-    ]);*/
+        $provider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'dataProvider' => $provider,
+            'searchModel' =>$searchModel,
+
+
         ]);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
     }
+
+
 
     /**
      * Displays a single User model.
@@ -99,19 +82,29 @@ class FuncionariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        if (Yii::$app->user->can('criarFuncionarios')) {
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Funcionarios', 'Funcionario Criado', 1);
+            $mqtt->disconnect();
+
+
+
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
     }
 
     /**
@@ -123,15 +116,28 @@ class FuncionariosController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->can('editarFuncionarios')) {
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+
+
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Funcionarios', 'Funcionario Atualizado', 1);
+            $mqtt->disconnect();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
     }
 
     /**
@@ -143,9 +149,21 @@ class FuncionariosController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->can('eliminarFuncionarios')) {
+
+
         $this->findModel($id)->delete();
 
+            $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
+            $mqtt->connect();
+            $mqtt->publish('Funcionarios', 'Funcionario Eliminado', 1);
+            $mqtt->disconnect();
+
         return $this->redirect(['index']);
+        } else {
+
+            $this->redirect(['site/error']);
+        }
     }
 
     /**

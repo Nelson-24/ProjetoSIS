@@ -23,7 +23,6 @@ class SignupForm extends Model
     public $id;
 
 
-
     /**
      * {@inheritdoc}
      */
@@ -64,9 +63,7 @@ class SignupForm extends Model
 
 
 
-
    public function signup()
-
     {
         if ($this->validate()) {
             $user = new User();
@@ -78,9 +75,7 @@ class SignupForm extends Model
             $user->save(false);
 
             $profile = new Profile();
-
             $profile->user_id = $user->id;
-
             $profile->nome = $this->nome;
             $profile->nif = $this->nif;
             $profile->morada = $this->morada;
@@ -102,3 +97,13 @@ class SignupForm extends Model
 
         return null;
     }
+}
+
+
+
+
+    /**
+     * Sends confirmation email to user
+     * @param User $user user model to with email should be send
+     * @return bool whether the email was sent
+     */

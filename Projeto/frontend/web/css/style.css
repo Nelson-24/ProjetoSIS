@@ -1,13 +1,12 @@
-/*--------------------------------------------------------------------- File Name: style.css ---------------------------------------------------------------------*/
 /*--------------------------------------------------------------------- import Files ---------------------------------------------------------------------*/
 
 @import url(animate.min.css);
 @import url(normalize.css);
 @import url(icomoon.css);
-@import url(font-awesome.min.css);
+
 @import url(meanmenu.css);
 @import url(owl.carousel.min.css);
-@import url(swiper.min.css);
+
 @import url(slick.css);
 @import url(jquery.fancybox.min.css);
 @import url(jquery-ui.css);
@@ -32,6 +31,12 @@ body {
     font-weight: normal;
     overflow-x: hidden;
     font-family: 'Poppins', sans-serif;
+    position :relative;
+    min-height: 100vh; /* Garante que a página tenha pelo menos a altura da janela do navegador */
+    margin: 0;
+    padding: 0;
+
+
 }
 
 a {
@@ -214,7 +219,7 @@ button {
 .banner_bg_main {
     width: 100%;
     float: left;
-    background-color: darkorange; /*CONFIGURAÇÃO DO BACKGROUND */
+    background-image: url(../images/banner-bg.png);
     height: auto;
     background-size: 100%;
     background-repeat: no-repeat;
@@ -815,10 +820,13 @@ a:hover {
 /* footer section start */
 
 .footer_section {
+    position: absolute;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    float: left;
-    background-color: #252525;
-    height: auto;
+    height: 60px; /* Altura do footer */
+    background-color: #f5f5f5; /* Cor de fundo do footer */
+    padding: 20px; /* Espaçamento interno do footer */
 }
 
 .footer_logo {

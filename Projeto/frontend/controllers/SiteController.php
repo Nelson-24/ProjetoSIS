@@ -2,12 +2,15 @@
 
 namespace frontend\controllers;
 
+use common\models\Artigos;
+use common\models\Fatura;
 use common\models\LoginForm;
-use frontend\models\SignupForm;
+use common\models\User;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\ResetPasswordForm;
+use frontend\models\SignupForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -75,7 +78,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $artigos = Artigos::find()->all();
+
+
+        return $this->render('index', [
+            'artigos' => $artigos,
+        ]);
     }
 
     /**
@@ -100,6 +109,35 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionProfile()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login']);
+        }
+
+        $userId = Yii::$app->user->identity->id;
+        $user = User::findOne($userId);
+
+        return $this->render('profile', [
+            'user' => $user,
+        ]);
+    }
+
+    public function actionFaturas()
+    {
+
+
+        $userId = Yii::$app->user->identity->id;
+        $model = Fatura::find()
+            ->where(['users_id' => $userId])
+            ->all();
+
+        return $this->render('faturasUser', [
+            'model' => $model,
+        ]);
+    }
+
+
 
     /**
      * Logs out the current user.

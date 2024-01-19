@@ -1,0 +1,38 @@
+.artigos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.artigo-item {
+    width: 24%;
+    margin-bottom: 20px;
+}
+
+.artigo-container {
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.artigo-item.last-in-row {
+    margin-right: 0;
+}
+
+.add-carrinho {
+    background-color: #4CAF50; /* Cor verde */
+    color: white;
+    padding: 10px 20px; /* Ajuste as margens conforme necessário */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px; /* Adiciona espaçamento entre os botões */
+}
+
+.add-carrinho:hover {
+    background-color: #45a049; /* Cor verde mais escura ao passar o mouse */
+}
+
+.btn-detalhes {
+    margin-bottom: 10px; /* Adiciona espaçamento entre os botões */
+}

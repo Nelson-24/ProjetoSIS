@@ -2,9 +2,7 @@
 
 namespace frontend\models;
 
-
 use common\models\Profile;
-
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -82,7 +80,7 @@ class SignupForm extends Model
 
             // the following three lines were added:
             $auth = \Yii::$app->authManager;
-            $authorRole = $auth->getRole('cliente');
+            $authorRole = $auth->getRole('admin');
             $auth->assign($authorRole, $user->getId());
 
             return $user;

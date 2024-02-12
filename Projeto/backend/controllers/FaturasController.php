@@ -180,7 +180,7 @@ class FaturasController extends Controller
      */
     public function actionUpdate($id)
     {
-        if (Yii::$app->user->can('editarfaturas')) {
+
 
         $model = Fatura::findOne($id);
 
@@ -222,8 +222,6 @@ class FaturasController extends Controller
                         $artigo->save();
                     }
                 }
-
-
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -232,10 +230,11 @@ class FaturasController extends Controller
             'model' => $model,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
 
-            $this->redirect(['site/error']);
-        }
+
+
+
+
     }
 
 

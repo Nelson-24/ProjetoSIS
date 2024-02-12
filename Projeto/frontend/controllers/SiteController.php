@@ -52,6 +52,8 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+
+
         ];
     }
 
@@ -109,32 +111,22 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionProfile()
+
+
+
+    public function actionBusca($query)
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['site/login']);
-        }
-
-        $userId = Yii::$app->user->identity->id;
-        $user = User::findOne($userId);
-
-        return $this->render('profile', [
-            'user' => $user,
-        ]);
-    }
-
-    public function actionFaturas()
-    {
-
-
-        $userId = Yii::$app->user->identity->id;
-        $model = Fatura::find()
-            ->where(['users_id' => $userId])
+        $artigos = Artigos::find()
+            ->where(['like', 'descricao', $query])
+            ->limit(3)
             ->all();
 
-        return $this->render('faturasUser', [
-            'model' => $model,
-        ]);
+        $sugestoes = [];
+        foreach ($artigos as $artigo) {
+            $sugestoes[] = $artigo->descricao;
+        }
+
+        return json_encode($sugestoes);
     }
 
 
@@ -152,23 +144,6 @@ class SiteController extends Controller
     }
 
 
-
-    public function actionArtigo()
-{
-    return $this->render('artigo');
-}
-    public function actionDetalhes()
-    {
-        return $this->render('detalhes');
-    }
-    public function actionPerfil()
-    {
-        return $this->render('perfil');
-    }
-    public function actionCarrinho()
-    {
-        return $this->render('carrinho');
-    }
 
 
     /**

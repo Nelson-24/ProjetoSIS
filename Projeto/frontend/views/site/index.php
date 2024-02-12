@@ -24,7 +24,14 @@ $artigo31 = \common\models\Artigos::findOne(31);
 <html lang="pt-pt">
 
 <body>
+
+
+
 <div class="banner_bg_main">
+    <!-- header top section start -->
+
+    <!-- header top section start -->
+    <!-- logo section start -->
     <div class="logo_section">
         <div class="container">
             <div class="row">
@@ -39,33 +46,69 @@ $artigo31 = \common\models\Artigos::findOne(31);
     <div class="header_section">
         <div class="container">
             <div class="containt_main">
+                <div id="mySidenav" class="sidenav">
 
+                </div>
+
+                <div class="dropdown">
+
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                    </div>
+                </div>
                 <div class="main">
                     <!-- Another variation with a button -->
                     <div class="input-group">
 
                         <div class="input-group-append">
-
-
                             </button>
                         </div>
                     </div>
                 </div>
+                <div class="header_box">
+                    <div class="lang_box ">
 
 
-
-
-
-
+                    </div>
+                    <div class="login_menu">
+                        <ul>
+                            <li><a href="#">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span><?= Html::a('Carrinho', ['/carrinho-compras/index']) ?></span>
+                            </li>
+                            <li><a href="#">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <span><?= Html::a('Perfil', ['/user/profile']) ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <!-- header section end -->
     <!-- banner section start -->
     <div class="banner_section layout_padding">
+        <div class="container">
+            <div id="my_slider" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h1 class="banner_taital">Comece já <br>temos as melhores soluções</h1>
+                                <div class="buynow_bt"><p><?= Html::a('Comprar', ['/artigo/index']) ?></p></div>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- banner section end -->
 </div>
+
 <!-- banner section end -->
 
 <!-- banner bg main end -->
@@ -256,5 +299,8 @@ $artigo31 = \common\models\Artigos::findOne(31);
 
 </div>
 </div>
-<!-- jewellery  section end -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="js/script.js"></script>
+
 </body>

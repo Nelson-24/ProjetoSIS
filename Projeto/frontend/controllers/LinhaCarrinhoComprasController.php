@@ -109,13 +109,12 @@ class LinhaCarrinhoComprasController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Yii::$app->request->post('delete-button') !== null) {
-            // Lógica para exclusão
-            // ...
-        }
+        $linha = $this->findModel($id);
+        $linha->delete();
 
-        return $this->redirect(['carrinho-compras/index']); // Redireciona para a página inicial após a exclusão
+        return $this->redirect(['/carrinho-compras/index']);
     }
+
 
     /**
      * Finds the Linhascarrinhocompras model based on its primary key value.

@@ -5,6 +5,8 @@ use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var \common\models\CarrinhoCompras $model */
+/** @var \common\models\Linhascarrinhocompras $linha */
+
 /** @var yii\widgets\ActiveForm $form */
 
 ?>
@@ -36,7 +38,13 @@ use yii\widgets\ActiveForm;
                     <h3><?= $linhaCarrinho->artigos->descricao ?></h3>
                     <p>Preço: $<?= $linhaCarrinho->valor ?></p>
                     <p>Quantidade: <?= $linhaCarrinho->quantidade ?></p>
-                    <button class="remove-item">Remover</button>
+                    <?= Html::a('Eliminar Artigo', ['linha-carrinho-compras/delete', 'id' => $linhaCarrinho->id], [
+                        'class' => 'remove-item',
+                        'data' => [
+
+                            'method' => 'post', // Utilize 'post' para ações de exclusão
+                        ],
+                    ]) ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -49,7 +57,7 @@ use yii\widgets\ActiveForm;
             <th><?php echo 'Total:  ' . $model->valorTotal. '<br>'; ?> </th>
 
             <?= Html::a('Pagamento Pronto', ['carrinho-compras/finalizar-carrinho', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Pagar Prestacoes', ['prestacoes/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+
 
 
 

@@ -101,15 +101,15 @@ class ArtigosController extends Controller
                 $imagem = UploadedFile::getInstance($model , 'imagem');
                 $imagem->saveAs('C:\wamp64\www\ProjetoPSI_\frontend\web\images\materiais\\' . $imagem->name);
                 $model->imagem = $imagem->name;
-
                 $model->save();
 
-                $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
 
+
+                $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
                 $mqtt->connect();
                 $mqtt->publish('Artigos', 'Artigo Criado'  .$model->descricao , 1);
                 $mqtt->disconnect();
-//mosquitto_sub -h 127.0.0.1 -t Artigos
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -175,7 +175,7 @@ class ArtigosController extends Controller
 
             $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
             $mqtt->connect();
-            $mqtt->publish('Artigos', 'Artigo Eliminado'.$this->descricao , 1);
+            $mqtt->publish('Artigos', 'Artigo Eliminado' , 1);
             $mqtt->disconnect();
 
 

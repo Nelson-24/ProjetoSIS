@@ -18,11 +18,11 @@ class Yii {
     public static $app;
 }
 
-/**
- * @property yii\rbac\DbManager $authManager 
- * @property \yii\web\User|__WebUser $user
- * 
- */
+    /**
+     * @property yii\rbac\DbManager $authManager
+     * @property \yii\web\User|__WebUser $user
+     *
+     */
 class __Application {
 }
 

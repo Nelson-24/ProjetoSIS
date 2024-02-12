@@ -57,48 +57,42 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule','controller' => [
                     'api/user',
-                    'api/register',
                     'api/artigo',
                     'api/iva',
                     'api/categoria',
                     'api/carrinho',
-                    'api/linha',
-                    'api/fatura',
                     'api/matematica',
                 ],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        //matematica
-                        'GET raizdois' =>'raizdois',
-
                         //user
                         'GET login' => 'login',
+                        'PUT dados'=>'puteditardados',
 
-                        //register
-                        'POST signup' => 'register',
+
+
 
                         //artigos
                         'GET descricoes' => 'getdescricoes',
                         'GET preco/{referencia}' => 'getprecoporreferencia',
-                        'PUT editarartigo/{id}' => 'putartigo',
+                        'DELETE referencia/{referencia}' => 'deleteporreferencia',
+                        'PUT referencia/{referencia}' => 'putprecoporreferencia',
                         'POST adicionarartigo' => 'postartigo',
-                        'DELETE eliminarartigo/{id}' => 'deleteartigo',
+                        'PUT editarartigo/{id}' => 'putartigo',
 
                         //categoria
                         'POST adicionarcategoria' => 'postcategoria',
-                        'PUT editarcategoria/{id}'=>'putcategoria',
+                        'PUT editarcategoria/{id}'=>'putdescricaoporid',
                         'DELETE eliminarcategoria/{id}'=>'deletecategoria',
 
                         //iva
                         'POST adicionariva' => 'postiva',
-                        'PUT editariva/{id}'=> 'putiva',
+                        'PUT editariva/{id}'=> 'putpercentagemporid',
                         'DELETE eliminariva/{id}'=>'deleteiva',
 
                         //carrinho
-                        'GET carrinho/{id}'=>'getcarrinho', 
-                        'GET ativo/{id}'=>'getativo',
-                        'GET finalizado/{id}'=>'getfinalizado',
-                        'POST adicionarcarrinho/{id}' =>'postcarrinho',
+                        'GET carrinho/{id}'=>'getcarrinhoporid',
+                        'POST adicionarcarrinho' =>'postcarrinho',
                         'DELETE eliminarcarrinho/{id}' =>'deletecarrinho',
                         'PUT finalizar/{id}' =>'putfinalizarcarrinho',
 
@@ -109,10 +103,12 @@ return [
                         'PUT linha/{id}'=>'putquantidadeporlinha',
 
                         //fatura
-                        'POST adicionarfatura/{id}' => 'postfaturaporcarrinho',
+                        'POST fatura/{id}' => 'postfaturaporcarrinho',
                         'PUT anularfatura/{id}' => 'putanularfatura',
-                        'GET faturas/{id}' => 'getfaturas',
 
+
+
+                        'GET raizdois' =>'raizdois',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',

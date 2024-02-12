@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
     <div class="cart-items">
         <?php foreach ($linhasCarrinho as $linhaCarrinho): ?>
             <div class="cart-item">
-                <!-- Informações de cada item do carrinho -->
+
                 <?php
                 $imagemSrc = 'http://localhost/ProjetoPSI_/frontend/web/images/materiais/' . $linhaCarrinho->artigos->imagem;
                 ?>

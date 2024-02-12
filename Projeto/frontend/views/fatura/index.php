@@ -30,7 +30,7 @@ use yii\helpers\Url;
         //'ivas_id',
         [
             'class' => ActionColumn::className(),
-            'template' => '{view}', // Exibir apenas o botão de visualização
+            'template' => '{view}',
 
             'urlCreator' => function ($action, Fatura $model) {
                 if ($action === 'view') {

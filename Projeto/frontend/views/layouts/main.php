@@ -9,6 +9,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -25,9 +26,6 @@ AppAsset::register($this);
     </head>
     <body class="d-flex flex-column h-100">
     <?php $this->beginBody() ?>
-
-
-
 <head>
     <!-- basic -->
     <meta charset="utf-8">
@@ -63,6 +61,9 @@ AppAsset::register($this);
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesoeet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+
+
+
 </head>
 
 
@@ -78,7 +79,7 @@ AppAsset::register($this);
 
         ['label' => 'Página Inicial', 'url' => ['/site/index']],
         ['label' => 'Artigos', 'url' => ['/artigo/index']],
-            ['label' => 'Perfil', 'url' => ['/user/profile'], 'linkOptions' => ['class' => 'fa fa-user']],
+
             ['label' => 'Carrinho', 'url' => ['/carrinho-compras/index'], 'linkOptions' => ['class' => 'fa fa-shopping-cart']],
 
 
@@ -88,13 +89,26 @@ AppAsset::register($this);
 
 
         if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Entrar', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Registar', 'url' => ['/site/signup']];
         } else {
-        $menuItems[] = [
-        'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-        'url' => ['/site/logout'],
-        'linkOptions' => ['data-method' => 'post']
-        ];
+            $menuItems[] = [
+                'label' => Yii::$app->user->identity->username,
+                'items' => [
+                    [
+                        'label' => 'Perfil', 'url' => ['/user/profile'], 'linkOptions' => ['class' => 'fa fa-user']
+                    ],
+                    [
+                        'label' => 'Faturas',
+                        'url' => ['/fatura/index'], // Substitua com a URL das faturas
+                    ],
+                    [
+                        'label' => 'Logout',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                    ],
+                ],
+            ];
         }
 
         echo Nav::widget([
@@ -104,27 +118,24 @@ AppAsset::register($this);
 
         NavBar::end();
         ?>
-        <!-- header top section start -->
-        <!-- logo section start -->
 
-
-        <!-- banner section end -->
 
 
         <?= $content ?>
 
 
 <!-- footer section start -->
-<div class="footer_section layout_padding">
-    <div class="container">
-        <div class="footer_logo"><a href="index.php"><img src="images/logotipo-loja.png" width="150" height="0"></a></div>
-        <div class="location_main">Apoio ao Cliente: <a href="#">+356 911 911 912</a></div>
-    </div>
-</div>
+
 <!-- footer section end -->
 <!-- copyright section start -->
 <div class="copyright_section">
     <div class="container">
+        <br>
+                <div class="footer_logo"><a href="index.php"><img src="images/logotipo-loja.png" width="150" height="0"></a></div>
+                <div class="location_main">Apoio ao Cliente: <a href="#">+356 911 911 912</a></div>
+
+
+
         <p class="copyright_text">© 2020 All Rights Reserved. Design by <a href="https://html.design">Free html  Templates</a></p>
     </div>
 </div>
@@ -138,7 +149,15 @@ AppAsset::register($this);
 <!-- sidebar -->
 <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="js/custom.js"></script>
-<script>
+
+
+
+
+
+
+
+
+    <script>
     function openNav() {
         document.getElementById("mySidenav").style.width = "250px";
     }
@@ -146,6 +165,12 @@ AppAsset::register($this);
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
     }
+
+
+
+
+
+
 </script>
 
 <?php $this->endBody() ?>

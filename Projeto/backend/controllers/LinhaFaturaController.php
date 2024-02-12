@@ -132,11 +132,6 @@ class LinhaFaturaController extends Controller
 
             if ($model->load(\Yii::$app->request->post()) && $model->save()) {
 
-                $mqtt = new \PhpMqtt\Client\MqttClient('127.0.0.1', '1883', 'backend');
-                $mqtt->connect();
-                $mqtt->publish('LinhaFatura', 'Linha Fatura Criada ', 1);
-                $mqtt->disconnect();
-
 
                 return $this->redirect(['faturas/update', 'id' => $faturas->id]);
             }
